@@ -1,3 +1,5 @@
+# Номер посылки - 68673533
+
 class Deque:
     def __init__(self, deque_length):
         self.items = [None] * deque_length
@@ -7,45 +9,44 @@ class Deque:
         self.size = 0
     
     def is_empty(self):
+        if self.size == 0:
+            print('error')
         return self.size == 0
 
+    def is_full(self):
+        if self.size == self.max_items:
+            print('error')
+        return self.size == self.max_items
+
     def push_front(self, item):
-        if self.size != self.max_items:
+        if not self.is_full():
             self.items[self.first] = item
             self.first = (self.first - 1) % self.max_items
             self.size += 1
-        else:
-            print('error')
             
     def push_back(self, item):
-        if self.size != self.max_items:
+        if not self.is_full():
             self.last = (self.last + 1) % self.max_items
             self.items[self.last] = item
             self.size += 1
-        else:
-            print('error')
 
     def pop_front(self):
-        if self.is_empty():
-            print('error')
-            return None
-        self.first = (self.first + 1) % self.max_items
-        item = self.items[self.first]
-        print(item)
-        self.items[self.first] = None
-        self.size -= 1
-        return item
+        if not self.is_empty():
+            self.first = (self.first + 1) % self.max_items
+            item = self.items[self.first]
+            print(item)
+            self.items[self.first] = None
+            self.size -= 1
+            return item
 
     def pop_back(self):
-        if self.is_empty():
-            print('error')
-            return None
-        item = self.items[self.last]
-        print(item)
-        self.items[self.last] = None
-        self.last = (self.last - 1) % self.max_items
-        self.size -= 1
-        return item
+        if not self.is_empty():
+            item = self.items[self.last]
+            print(item)
+            self.items[self.last] = None
+            self.last = (self.last - 1) % self.max_items
+            self.size -= 1
+            return item
 
 
 def read_input_data():
