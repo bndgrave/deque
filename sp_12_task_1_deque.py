@@ -1,4 +1,4 @@
-# Номер посылки - 68673533
+# Номер посылки - 68695479
 
 class DequeUpdateError(BaseException):
     """Класс исключений для обработки """
@@ -26,35 +26,32 @@ class Deque:
     def __is_full(self):
         return self.__size == self.__max_items
 
-    # def __move_pointer_left(self, pointer):
-    #     attr = getattr(self, pointer)
-    #     attr = (attr - 1) % self.__max_items
+    def __move_pointer_left(self, pointer):
+        attr = getattr(self, pointer)
+        return (attr - 1) % self.__max_items
     
-    # def __move_pointer_right(self, pointer):
-    #     attr = getattr(self, pointer)
-    #     attr = (attr + 1) % self.__max_items
+    def __move_pointer_right(self, pointer):
+        attr = getattr(self, pointer)
+        return (attr + 1) % self.__max_items
 
     def push_front(self, item):
         if self.__is_full():
             raise DequeUpdateError()
         self.__items[self.__first] = item
-        self.__first = (self.__first - 1) % self.__max_items
-        # self.__move_pointer_left('__first')
+        self.__first = self.__move_pointer_left('_Deque__first')
         self.__size += 1
             
     def push_back(self, item):
         if self.__is_full():
             raise DequeUpdateError()
-        self.__last = (self.__last + 1) % self.__max_items
-        # self.__move_pointer_right('__last')
+        self.__last = self.__move_pointer_right('_Deque__last')
         self.__items[self.__last] = item
         self.__size += 1
 
     def pop_front(self):
         if self.__is_empty():
             raise DequeUpdateError()
-        self.__first = (self.__first + 1) % self.__max_items
-        # self.__move_pointer_right('__first')
+        self.__first = self.__move_pointer_right('_Deque__first')
         item = self.__items[self.__first]
         self.__items[self.__first] = None
         self.__size -= 1
@@ -65,8 +62,7 @@ class Deque:
             raise DequeUpdateError()
         item = self.__items[self.__last]
         self.__items[self.__last] = None
-        self.__last = (self.__last - 1) % self.__max_items
-        # self.__move_pointer_left('__last')
+        self.__last = self.__move_pointer_left('_Deque__last')
         self.__size -= 1
         return item
 
