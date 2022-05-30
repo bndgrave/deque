@@ -1,52 +1,74 @@
 # Номер посылки - 68673533
 
+class DequeUpdateError(BaseException):
+    """Класс исключений для обработки """
+    def __init__(self,*args,**kwargs):
+        if args:
+            self.message = args[0]
+        else:
+            self.message = 'error'
+
+    def __str__(self):
+        return self.message
+
+
 class Deque:
     def __init__(self, deque_length):
-        self.items = [None] * deque_length
-        self.max_items = deque_length
-        self.first = 0
-        self.last = 0
-        self.size = 0
+        self.__items = [None] * deque_length
+        self.__max_items = deque_length
+        self.__first = 0
+        self.__last = 0
+        self.__size = 0
     
-    def is_empty(self):
-        if self.size == 0:
-            print('error')
-        return self.size == 0
+    def __is_empty(self):
+        return self.__size == 0
 
-    def is_full(self):
-        if self.size == self.max_items:
-            print('error')
-        return self.size == self.max_items
+    def __is_full(self):
+        return self.__size == self.__max_items
+
+    # def __move_pointer_left(self, pointer):
+    #     attr = getattr(self, pointer)
+    #     attr = (attr - 1) % self.__max_items
+    
+    # def __move_pointer_right(self, pointer):
+    #     attr = getattr(self, pointer)
+    #     attr = (attr + 1) % self.__max_items
 
     def push_front(self, item):
-        if not self.is_full():
-            self.items[self.first] = item
-            self.first = (self.first - 1) % self.max_items
-            self.size += 1
+        if self.__is_full():
+            raise DequeUpdateError()
+        self.__items[self.__first] = item
+        self.__first = (self.__first - 1) % self.__max_items
+        # self.__move_pointer_left('__first')
+        self.__size += 1
             
     def push_back(self, item):
-        if not self.is_full():
-            self.last = (self.last + 1) % self.max_items
-            self.items[self.last] = item
-            self.size += 1
+        if self.__is_full():
+            raise DequeUpdateError()
+        self.__last = (self.__last + 1) % self.__max_items
+        # self.__move_pointer_right('__last')
+        self.__items[self.__last] = item
+        self.__size += 1
 
     def pop_front(self):
-        if not self.is_empty():
-            self.first = (self.first + 1) % self.max_items
-            item = self.items[self.first]
-            print(item)
-            self.items[self.first] = None
-            self.size -= 1
-            return item
+        if self.__is_empty():
+            raise DequeUpdateError()
+        self.__first = (self.__first + 1) % self.__max_items
+        # self.__move_pointer_right('__first')
+        item = self.__items[self.__first]
+        self.__items[self.__first] = None
+        self.__size -= 1
+        return item
 
     def pop_back(self):
-        if not self.is_empty():
-            item = self.items[self.last]
-            print(item)
-            self.items[self.last] = None
-            self.last = (self.last - 1) % self.max_items
-            self.size -= 1
-            return item
+        if self.__is_empty():
+            raise DequeUpdateError()
+        item = self.__items[self.__last]
+        self.__items[self.__last] = None
+        self.__last = (self.__last - 1) % self.__max_items
+        # self.__move_pointer_left('__last')
+        self.__size -= 1
+        return item
 
 
 def read_input_data():
@@ -61,7 +83,14 @@ def read_input_data():
 
 if __name__ == '__main__':
     input_data = read_input_data()
-    d = Deque(input_data['deque_length'])
+    deque = Deque(input_data['deque_length'])
     for command in input_data['commands']:
-        method = getattr(d, command[0])
-        method(int(command[1])) if len(command) == 2 else method()
+        method = getattr(deque, command[0])
+        try:
+            result = (
+                method(int(command[1])) if len(command) == 2 else method()
+            )
+            if result is not None:
+                print(result)
+        except DequeUpdateError as error:
+            print(error)
