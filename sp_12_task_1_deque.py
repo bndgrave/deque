@@ -2,7 +2,7 @@
 
 class DequeUpdateError(BaseException):
     """Класс исключений для обработки """
-    def __init__(self,*args,**kwargs):
+    def __init__(self, *args, **kwargs):
         if args:
             self.message = args[0]
         else:
@@ -76,6 +76,7 @@ def read_input_data():
         command = input().split(' ')
         input_data['commands'].append(command)
     return input_data
+
 
 if __name__ == '__main__':
     input_data = read_input_data()
