@@ -1,7 +1,5 @@
-# Номер посылки - 68726758
-
 class DequeUpdateError(BaseException):
-    """Класс исключений для обработки """
+    """Класс исключений для обработки ошибок при операциях с деком"""
     def __init__(self, *args, **kwargs):
         if args:
             self.message = args[0]
